@@ -1,103 +1,72 @@
 <template>
 	<div id="app">
-		<h1>pRO Market</h1>
+		<nav class="ui top fixed borderless menu">
+			<div class="ui container">
+				<a href="#" class="header item">
+					<h1>pRO Market</h1>
+				</a>
 
-		<button @click="loginFacebook">Login with Facebook</button>
-		<button @click="logoutFacebook">Logout</button>
-
-		<div>
-			<div v-if="books.length === 0">
-				Loading...
+				<pro-user-menu :loggedUser="loggedUser"></pro-user-menu>
 			</div>
-			<div v-else>
-				<p v-for="book in books">
-					<a v-bind:href="book.name">{{book.name}}</a>
-					{{book.author}} / {{ book['.key'] }}
-				</p>
-			</div>
-		</div>
+		</nav>
 
-		<div>
-			<form id="form" v-on:submit.prevent="addBook">
-				<input type="text" id="bookName" v-model="newBook.name">
-				<input type="text" id="bookAuthor" v-model="newBook.author">
-				<input type="submit" value="Add book">
-			</form>
-		</div>
+		<main class="ui container">
+			<router-view></router-view>
+		</main>
 	</div>
 </template>
 
 <script>
-import Firebase from 'firebase'
+import firebase from 'firebase'
 import Config from './Config'
+import UserMenu from './components/UserMenu.vue'
 
+// Setup firebase
 let config = {
 	apiKey: Config.FIREBASE_API_KEY,
 	authDomain: Config.FIREBASE_AUTH_DOMAIN,
 	databaseURL: Config.FIREBASE_DATABASE_URL,
 	storageBucket: Config.FIREBASE_STORAGE_BUCKET,
-};
+}
 
-let app = Firebase.initializeApp(config)
+let app = firebase.initializeApp(config)
 let db = app.database()
-let booksRef = db.ref('books')
 
 export default {
 	name: 'app',
 	data () {
 		return {
-			newBook: {
-				name: '',
-				author: '',
-			}
+			loggedUser: {},
 		}
+	},
+	components: {
+		'pro-user-menu': UserMenu
+	},
+	created() {
+		firebase.auth().onAuthStateChanged(function(user) {
+			if (user) {
+				this.loggedUser = user
+				var usersRef = db.ref('users')
+				usersRef.child(user.uid).set({
+					name: user.displayName,
+					email: user.email
+				})
+			} else {
+				this.loggedUser = null
+			}
+		}.bind(this))
 	},
 	methods: {
-		addBook() {
-			booksRef.push(this.newBook)
-			this.newBook.name = ''
-			this.newBook.author = ''
-		},
-		loginFacebook() {
-			var provider = new Firebase.auth.FacebookAuthProvider();
-			provider.addScope('user_birthday');
-			// provider.setCustomParameters({
-			// 	'display': 'popup'
-			// });
-
-			Firebase.auth().signInWithRedirect(provider).then(function(result) {
-				console.log(result);
-				var token = result.credential.accessToken;
-				var user = result.user;
-			}).catch(function(error) {
-				console.log(error);
-
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				var email = error.email;
-				var credential = error.credential;
-			});
-		},
-		logoutFacebook() {
-			Firebase.auth().signOut().then(function() {
-				console.log("logged out");
-			}).catch(function(error) {
-				console.log(error);
-			});
-		}
-	},
-	firebase: {
-		books: booksRef
 	},
 }
 </script>
 
 <style lang="scss">
-#app {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #2c3e50;
-	margin-top: 60px;
+* {
+	font-family: 'Avenir' !important
+}
+
+main {
+	margin-top: 120px
 }
 </style>
