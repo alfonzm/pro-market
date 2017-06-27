@@ -1,13 +1,28 @@
+import firebase from 'firebase'
+
 const Home = require('./pages/Home.vue')
 const Sell = require('./pages/Sell.vue')
 
-module.exports = [
-	{
-		path: '/',
-		component: Home
-	},
-	{
-		path: '/sell',
-		component: Sell
-	},
+export default [
+{
+	path: '/',
+	component: Home
+},
+{
+	path: '/sell',
+	component: Sell,
+	beforeEnter: (to, from, next) => {
+		checkLoggedIn(next)
+	}
+},
 ]
+
+function checkLoggedIn(next) {
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			next()
+		} else {
+			alert('no')
+		}
+	});
+}

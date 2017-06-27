@@ -21,7 +21,9 @@
 					</div>
 				</div>
 				<div class="three wide field">
-					<div class="ui large fluid green submit button">Sell an item</div>
+				    <router-link to="/sell" class="ui large fluid green submit button">
+					    Sell an item
+				    </router-link>
 				</div>
 			</div>
 		</div>

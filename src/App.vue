@@ -2,7 +2,7 @@
 	<div id="app">
 		<nav class="ui top fixed borderless menu">
 			<div class="ui container">
-				<a href="#" class="header item">
+				<a href="/" class="header item">
 					<h1>pRO Market</h1>
 				</a>
 
@@ -63,7 +63,7 @@ export default {
 
 <style lang="scss">
 * {
-	font-family: 'Avenir' !important
+	// font-family: 'Avenir' !important
 }
 
 main {
