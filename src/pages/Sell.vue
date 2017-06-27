@@ -52,6 +52,11 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+import FirebaseStore from '../helpers/FirebaseStore'
+
+const db = FirebaseStore.db
+const sellItemsRef = db.ref('sellItems')
 
 export default {
 	data() {
@@ -72,13 +77,26 @@ export default {
 	},
 	methods: {
 		submitSellForm() {
-			this.server = $('#server.dropdown').dropdown('get value');
+			this.form.server = $('#server.dropdown').dropdown('get value') || null
 			this.form.submitting = true
-			console.log(this.form)
+
+			var newSellItemRef = sellItemsRef.push();
+
+			newSellItemRef.set(this.form, (err) => {
+				if(err) {
+					console.log(err)
+					return
+				}
+
+				this.$router.push('/sell/' + newSellItemRef.key)
+			})
 		},
 		setServer(server){
 			this.form.server = server
 		}
+	},
+	firebase: {
+		sellItems: db.ref('sellItems')
 	}
 }
 </script>

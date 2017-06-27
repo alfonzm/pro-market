@@ -18,19 +18,10 @@
 
 <script>
 import firebase from 'firebase'
-import Config from './Config'
 import UserMenu from './components/UserMenu.vue'
+import FirebaseStore from './helpers/FirebaseStore'
 
-// Setup firebase
-let config = {
-	apiKey: Config.FIREBASE_API_KEY,
-	authDomain: Config.FIREBASE_AUTH_DOMAIN,
-	databaseURL: Config.FIREBASE_DATABASE_URL,
-	storageBucket: Config.FIREBASE_STORAGE_BUCKET,
-}
-
-let app = firebase.initializeApp(config)
-let db = app.database()
+const db = FirebaseStore.db
 
 export default {
 	name: 'app',

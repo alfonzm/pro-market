@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Config from './Config'
+import firebase from 'firebase'
 import VueFire from 'vuefire'
 
 import routes from './Routes'
