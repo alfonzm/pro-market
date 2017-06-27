@@ -1,28 +1,23 @@
-import firebase from 'firebase'
-
 const Home = require('./pages/Home.vue')
-const Sell = require('./pages/Sell.vue')
+const Login = require('./pages/Login.vue')
+const SellForm = require('./pages/SellForm.vue')
+const SellItem = require('./pages/SellItem.vue')
 
 export default [
-{
-	path: '/',
-	component: Home
-},
-{
-	path: '/sell',
-	component: Sell,
-	beforeEnter: (to, from, next) => {
-		checkLoggedIn(next)
-	}
-},
+	{
+		path: '/',
+		component: Home
+	},
+	{
+		path: '/login',
+		component: Login
+	},
+	{
+		path: '/sell',
+		component: SellForm,
+	},
+	{
+		path: '/sell/:sellItemId',
+		component: SellItem
+	},
 ]
-
-function checkLoggedIn(next) {
-	firebase.auth().onAuthStateChanged(function(user) {
-		if (user) {
-			next()
-		} else {
-			alert('no')
-		}
-	});
-}

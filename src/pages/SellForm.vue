@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="isAuthenticated">
 		<h1 class="ui header">
 			Sell an item
 			<div class="sub header">Create an item to sell to other players!</div>
@@ -49,6 +49,9 @@
 			</button>
 		</div>
 	</div>
+	<div v-else>
+		Loading...
+	</div>
 </template>
 
 <script>
@@ -61,6 +64,7 @@ const sellItemsRef = db.ref('sellItems')
 export default {
 	data() {
 		return {
+			isAuthenticated: false,
 			formSize: 'large',
 			form: {
 				title: null,
@@ -74,6 +78,12 @@ export default {
 	},
 	mounted() {
 		$('.dropdown').dropdown();
+
+		FirebaseStore.checkLoggedIn(() => {
+			this.isAuthenticated = true
+		}, () => {
+			this.$router.push('/login')
+		});
 	},
 	methods: {
 		submitSellForm() {

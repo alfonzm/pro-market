@@ -7,5 +7,14 @@ let db = app.database()
 
 export default {
 	app,
-	db
+	db,
+	checkLoggedIn(success, error) {
+		firebase.auth().onAuthStateChanged(function(user) {
+			if (user) {
+				success(user)
+			} else {
+				error()
+			}
+		});
+	}
 }

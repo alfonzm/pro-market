@@ -2,9 +2,9 @@
 	<div id="app">
 		<nav class="ui top fixed borderless menu">
 			<div class="ui container">
-				<a href="/" class="header item">
+				<router-link to="/" class="header item">
 					<h1>pRO Market</h1>
-				</a>
+				</router-link>
 
 				<pro-user-menu :loggedUser="loggedUser"></pro-user-menu>
 			</div>
@@ -34,18 +34,16 @@ export default {
 		'pro-user-menu': UserMenu
 	},
 	created() {
-		firebase.auth().onAuthStateChanged(function(user) {
-			if (user) {
-				this.loggedUser = user
-				var usersRef = db.ref('users')
-				usersRef.child(user.uid).set({
-					name: user.displayName,
-					email: user.email
-				})
-			} else {
-				this.loggedUser = null
-			}
-		}.bind(this))
+		FirebaseStore.checkLoggedIn((user) => {
+			this.loggedUser = user
+			var usersRef = db.ref('users')
+			usersRef.child(user.uid).set({
+				name: user.displayName,
+				email: user.email
+			})
+		}, () => {
+			this.loggedUser = null
+		})
 	},
 	methods: {
 	},
