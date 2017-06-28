@@ -4,12 +4,12 @@
 			Sell an item
 			<div class="sub header">Create an item to sell to other players!</div>
 		</h1>
-		<div :class="['ui form', formSize, { loading: form.submitting }]">
-			<div class="field">
+		<div :class="['ui form', formSize, { loading: submitting }]">
+			<div class="required field">
 				<label>Title</label>
-				<input v-model="form.title" type="text" placeholder="ex. S>+10 Main Gauche">
+				<input v-model="newItem.title" type="text" placeholder="ex. +10 Main Gauche">
 			</div>
-			<div class="three wide field">
+			<div class="required five wide field">
 				<label>Server</label>
 				<div class="ui selection dropdown" id="server">
 					<input type="hidden" name="gender">
@@ -21,29 +21,51 @@
 					</div>
 				</div>
 			</div>
-			<div class="fields">
-				<div class="three wide field">
+			<div class="required fields">
+				<div class="five wide field">
 					<label>Quantity</label>
 					<div class="ui right labeled input">
-						<input v-model="form.quantity" type="number" value="1">
+						<input v-model="newItem.quantity" type="number" value="1">
 						<div class="ui basic label">pc(s)</div>
 					</div>
 				</div>
 			</div>
 			<div class="fields">
-				<div class="three wide field">
+				<div class="five wide field">
 					<label>Price</label>
 					<div class="ui right labeled input">
-						<input v-model="form.price" type="number" value="" placeholder="100,000">
+						<input v-model="newItem.price" type="number" value="" placeholder="(Optional) ex. 100,000">
 						<div class="ui basic label">zeny</div>
 					</div>
+				</div>
+				<div class="field">
+					<label>&nbsp;</label>
+					<button id="trades" :class="['ui button basic', formSize, { green: newItem.acceptTrades }]" @click="toggleTrades">
+						<template v-if="newItem.acceptTrades">
+							<i class="icon check"></i> Accepting trades
+						</template>
+						<template v-else>
+							Accept trades
+						</template>
+					</button>
+				</div>
+				<div class="field">
+					<label>&nbsp;</label>
+					<button id="offers" :class="['ui button basic', formSize, { green: newItem.acceptOffers }]" @click="toggleOffers">
+						<template v-if="newItem.acceptOffers">
+							<i class="icon check"></i> Accepting offers
+						</template>
+						<template v-else>
+							Accept offers
+						</template>
+					</button>
 				</div>
 			</div>
 			<div class="field">
 				<label>Description</label>
-				<textarea v-model="form.description" rows="3" placeholder="(Optional) ex. PM me your offers ingame, I'll accept trade too"></textarea>
+				<textarea v-model="newItem.description" rows="3" placeholder="(Optional) ex. PM me your offers ingame, I'll accept trade too"></textarea>
 			</div>
-			<button :class="'ui submit green button large'" @click="submitSellForm">
+			<button :class="'ui submit primary button huge'" @click="submitSellForm">
 				<i class="icon check"></i>
 				Start selling
 			</button>
@@ -66,33 +88,45 @@ export default {
 		return {
 			isAuthenticated: false,
 			formSize: 'large',
-			form: {
+			server: null,
+			submitting: false,
+
+			newItem: {
 				title: null,
 				quantity: 1,
+				acceptOffers: false,
+				acceptTrades: false,
 				price: null,
 				description: null,
-				server: null,
-				submitting: false
+				userId: null
 			}
 		}
 	},
 	mounted() {
-		$('.dropdown').dropdown();
+		setTimeout(() => {
+			$('.dropdown').dropdown()
+		}, 50)
 
 		FirebaseStore.checkLoggedIn(() => {
 			this.isAuthenticated = true
+			this.newItem.userId = FirebaseStore.getLoggedInUser().uid
 		}, () => {
 			this.$router.push('/login')
-		});
+		})
+	},
+	activate() {
+		console.log('hi');
 	},
 	methods: {
 		submitSellForm() {
-			this.form.server = $('#server.dropdown').dropdown('get value') || null
-			this.form.submitting = true
+			this.server = $('#server.dropdown').dropdown('get value') || null
+			this.submitting = true
 
-			var newSellItemRef = sellItemsRef.push();
+			var newSellItemRef = sellItemsRef.child(this.server).push()
 
-			newSellItemRef.set(this.form, (err) => {
+			this.newItem.created_at = firebase.database.ServerValue.TIMESTAMP
+
+			newSellItemRef.set(this.newItem, (err) => {
 				if(err) {
 					console.log(err)
 					return
@@ -102,8 +136,14 @@ export default {
 			})
 		},
 		setServer(server){
-			this.form.server = server
-		}
+			this.server = server
+		},
+		toggleOffers() {
+			this.newItem.acceptOffers = !this.newItem.acceptOffers
+		},
+		toggleTrades() {
+			this.newItem.acceptTrades = !this.newItem.acceptTrades
+		},
 	},
 	firebase: {
 		sellItems: db.ref('sellItems')
@@ -112,5 +152,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+.field, .fields {
+	padding-top: 5px;
+}
 </style>

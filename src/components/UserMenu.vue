@@ -6,11 +6,11 @@
 				<strong>Alfonz</strong>
 			</div>
 			<div class="menu">
-				<div class="item">Profile</div>
-				<div class="item">Buy an item</div>
-				<div class="item">Sell an item</div>
+				<router-link to="/profile" class="item">Profile</router-link>
+				<!-- <router-link to="/buy" class="item">Buy an item</router-link> -->
+				<router-link to="/sell" class="item">Sell an item</router-link>
 				<div class="ui divider"></div>
-				<div class="item">Preferences</div>
+				<router-link to="/preferences" class="item">Preferences</router-link>
 				<div class="item" @click="logoutFacebook">Logout</div>
 			</div>
 		</div>

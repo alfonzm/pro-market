@@ -29,16 +29,35 @@
 		</div>
 
 		<!-- Popular items list -->
-		<h1>Popular Items:</h1>
-		<pro-item-listing-list></pro-item-listing-list>
+		<h1>Latest</h1>
+		<div v-if="loadingLatestItems">
+			Loading...
+		</div>
+		<pro-item-listing-list v-else :items="latestItems" />
 	</div>
 </template>
 
 <script>
-import ItemListingList from '../components/ItemListingList.vue';
+import ItemListingList from '../components/ItemListingList.vue'
+import ItemsStore from '../helpers/ItemsStore'
+import UserStore from '../helpers/UserStore'
+import _ from 'lodash'
 
 export default {
-	created() {
+	data() {
+		return {
+			latestItems: [],
+			loadingLatestItems: true
+		}
+	},
+	mounted() {
+		setTimeout(() => {
+			UserStore.serverSetting = 'thor'
+		}, 3000)
+		ItemsStore.getLatestItems(UserStore.serverSetting, 10, (items) => {
+			this.latestItems = items
+			this.loadingLatestItems = false
+		})
 	},
 	components: {
 		'pro-item-listing-list': ItemListingList

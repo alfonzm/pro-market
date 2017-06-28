@@ -1,5 +1,7 @@
 const Home = require('./pages/Home.vue')
 const Login = require('./pages/Login.vue')
+const Profile = require('./pages/Profile.vue')
+const Preferences = require('./pages/Preferences.vue')
 const SellForm = require('./pages/SellForm.vue')
 const SellItem = require('./pages/SellItem.vue')
 
@@ -11,6 +13,14 @@ export default [
 	{
 		path: '/login',
 		component: Login
+	},
+	{
+		path: '/profile',
+		component: Profile
+	},
+	{
+		path: '/preferences',
+		component: Preferences
 	},
 	{
 		path: '/sell',

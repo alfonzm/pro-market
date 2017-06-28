@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "deploy": "npm run build && cp index.html ./public && cp -R dist ./public && firebase deploy"
+    "deploy": "npm run build && cp index.html ./public && cp -R dist ./public && cp -R semantic ./public && firebase deploy"
   },
   "dependencies": {
     "firebase": "^4.1.3",
     "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
     "semantic-ui": "^2.2.10",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0",

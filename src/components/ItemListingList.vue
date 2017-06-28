@@ -1,8 +1,13 @@
 <template>
 	<div>
-		<pro-item-listing name="Test" price="123" qty="1"></pro-item-listing>
-		<pro-item-listing name="Test" price="123" qty="1"></pro-item-listing>
-		<pro-item-listing name="Test" price="123" qty="1"></pro-item-listing>
+		<div v-for="item in items">
+			<pro-item-listing
+				:title="item.title"
+				:quantity="item.quantity"
+				:price="item.price"
+				:description="item.description"
+				/>
+		</div>
 	</div>
 </template>
 
@@ -13,6 +18,7 @@ import Store from '../Store';
 export default {
 	created() {
 	},
+	props: ['items'],
 	components: {
 		'pro-item-listing': ItemListing
 	},

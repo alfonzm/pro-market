@@ -1,20 +1,28 @@
 <template>
-	<div>
-		<h1 class="ui header">
-			{{ name }}
-			<div class="sub header">Price: {{ price }} / Qty: {{ qty }}</div>
-		</h1>
+	<div class="item-listing">
+		<h3 class="ui header">
+			{{ title }}
+			<div class="sub header">Price: {{ price }} / Qty: {{ quantity }}</div>
+		</h3>
 	</div>
 </template>
 
 <script>
 	export default {
 		props: [
-			'name',
+			'title',
+			'quantity',
 			'price',
-			'qty'
+			'description',
+			'server',
 		],
 		methods: {
 		}
 	}
 </script>
+
+<style lang="scss">
+.item-listing {
+	padding: 10px 0;
+}
+</style>
