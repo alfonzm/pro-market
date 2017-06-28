@@ -29,11 +29,12 @@
 		</div>
 
 		<!-- Popular items list -->
-		<h1>Latest</h1>
+		<h1>Latest ({{ serverSetting | capitalize }})</h1>
 		<div v-if="loadingLatestItems">
 			Loading...
 		</div>
 		<pro-item-listing-list v-else :items="latestItems" />
+		<router-link :to="'/sell/items/' + serverSetting">View all...</router-link>
 	</div>
 </template>
 
@@ -46,18 +47,27 @@ import _ from 'lodash'
 export default {
 	data() {
 		return {
+			serverSetting: UserStore.getServer(),
 			latestItems: [],
 			loadingLatestItems: true
 		}
 	},
 	mounted() {
-		setTimeout(() => {
-			UserStore.serverSetting = 'thor'
-		}, 3000)
-		ItemsStore.getLatestItems(UserStore.serverSetting, 10, (items) => {
-			this.latestItems = items
-			this.loadingLatestItems = false
+		this.loadLatestItems()
+		bus.$on('change-server-setting', (newServer) => {
+			this.loadLatestItems()
+			this.serverSetting = newServer
 		})
+	},
+	methods: {
+		loadLatestItems() {
+			this.loadingLatestItems = true
+
+			ItemsStore.getLatestItems(UserStore.getServer(), 10, (items) => {
+				this.latestItems = items
+				this.loadingLatestItems = false
+			})
+		}
 	},
 	components: {
 		'pro-item-listing-list': ItemListingList

@@ -12,9 +12,9 @@
 			<div class="required five wide field">
 				<label>Server</label>
 				<div class="ui selection dropdown" id="server">
-					<input type="hidden" name="gender">
+					<input type="hidden" name="server" :value="serverSetting">
 					<i class="dropdown icon"></i>
-					<div class="default text">Server</div>
+					<div class="default text"></div>
 					<div class="menu">
 						<div class="item" data-value="thor">Thor</div>
 						<div class="item" data-value="loki">Loki</div>
@@ -79,6 +79,7 @@
 <script>
 import firebase from 'firebase'
 import FirebaseStore from '../helpers/FirebaseStore'
+import UserStore from '../helpers/UserStore'
 
 const db = FirebaseStore.db
 const sellItemsRef = db.ref('sellItems')
@@ -90,6 +91,7 @@ export default {
 			formSize: 'large',
 			server: null,
 			submitting: false,
+			serverSetting: UserStore.getServer(),
 
 			newItem: {
 				title: null,

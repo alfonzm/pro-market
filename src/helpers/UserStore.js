@@ -1,3 +1,10 @@
+import Cookies from 'cookies-js'
+
 export default {
-	serverSetting: 'loki'
+	getServer() {
+		return Cookies.get('server')
+	},
+	setServer(server) {
+		Cookies.set('server', server)
+	},
 }

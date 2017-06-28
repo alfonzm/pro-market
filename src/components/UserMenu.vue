@@ -1,15 +1,25 @@
 <template>
 	<div class="right menu">
+		<div class="ui dropdown item" v-if="server">
+			Server:&nbsp;<strong>{{ server | capitalize }}</strong>
+			<i class="icon dropdown"></i>
+			<div class="menu">
+				<div @click="setServer('thor')" class="item">Thor</div>
+				<div @click="setServer('loki')" class="item">Loki</div>
+			</div>
+		</div>
 		<div v-if="loggedUser && loggedUser.uid" class="ui inline top pointing right dropdown link item">
 			<div>
 				<img :src="loggedUser.photoURL" class="ui avatar image">
-				<strong>Alfonz</strong>
 			</div>
 			<div class="menu">
 				<router-link to="/profile" class="item">Profile</router-link>
-				<!-- <router-link to="/buy" class="item">Buy an item</router-link> -->
+				<router-link to="/messages" class="item">Messages (1)</router-link>
+				<div class="ui divider"></div>
+				
 				<router-link to="/sell" class="item">Sell an item</router-link>
 				<div class="ui divider"></div>
+
 				<router-link to="/preferences" class="item">Preferences</router-link>
 				<div class="item" @click="logoutFacebook">Logout</div>
 			</div>
@@ -24,12 +34,26 @@
 
 <script>
 import firebase from 'firebase'
+import UserStore from '../helpers/UserStore'
 
 export default {
 	props: [
 		'loggedUser'
 	],
+	data() {
+		return {
+			server: null
+		}
+	},
+	watch: {
+		server: (newServer, oldServer) => {
+			UserStore.setServer(newServer)
+			bus.$emit('change-server-setting', newServer)
+		}
+	},
 	mounted() {
+		this.server = UserStore.getServer()
+
 		firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
 				setTimeout(function(){
@@ -39,6 +63,9 @@ export default {
 		}.bind(this))
 	},
 	methods: {
+		setServer(server){
+			this.server = server
+		},
 		loginFacebook() {
 			var provider = new firebase.auth.FacebookAuthProvider()
 			provider.addScope('user_birthday')
