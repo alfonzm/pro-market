@@ -11,16 +11,16 @@
 		</header>
 		
 		<!-- Search box -->
-		<div class="ui large form">
-			<div class="inline fields">
-				<div class="thirteen wide field">
+		<div class="ui large stackable form">
+			<div class="ui stackable grid">
+				<div class="twelve wide column">
 					<div class="ui fluid action input left icon">
 						<i class="search icon"></i>
 						<input type="text" placeholder="Search: ex. Red Potions, Slotted Muffler, +7 Quad Bloody Main Gauche">
 						<div class="ui large basic button">Search</div>
 					</div>
 				</div>
-				<div class="three wide field">
+				<div class="four wide column">
 				    <router-link to="/sell" class="ui large fluid green submit button">
 					    Sell an item
 				    </router-link>
@@ -29,10 +29,10 @@
 		</div>
 
 		<!-- Popular items list -->
-		<div class="ui grid">
+		<div class="ui stackable grid latest-items">
 			<!-- Latest items list -->
 			<div class="ten wide column">
-				<h1>Latest items ({{ serverSetting | capitalize }})</h1>
+				<h1>Latest items</h1>
 
 				<!-- Loading items -->
 				<div v-if="loadingLatestItems">
@@ -41,7 +41,6 @@
 				<!-- Display list items -->
 				<div v-else>
 					<pro-item-listing-list :items="latestItems" />
-					<router-link :to="'/sell/' + serverSetting">View all...</router-link>
 				</div>
 			</div>
 			<div class="six wide column">
@@ -76,7 +75,7 @@ export default {
 		loadLatestItems() {
 			this.loadingLatestItems = true
 
-			ItemsStore.getLatestItems(UserStore.getServer(), 10, (items) => {
+			ItemsStore.getLatestItems(UserStore.getServer(), 5, (items) => {
 				this.latestItems = items
 				this.loadingLatestItems = false
 			})
@@ -89,7 +88,13 @@ export default {
 </script>
 
 <style lang="scss">
-#home header.segment {
-	padding: 50px 0;
+#home {
+	header.segment {
+		padding: 50px 0;
+	}
+
+	.latest-items {
+		margin-top: 50px;
+	}
 }
 </style>

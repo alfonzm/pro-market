@@ -50,14 +50,16 @@
 							</div>
 						</h1>
 
+						<div class="ui divider"></div>
+
 						<router-link to="/buy/" class="ui fluid button green">
-							<i class="icon money"></i> Buy item
+							<i class="icon shopping cart"></i> Buy item
 						</router-link><br/>
 						<router-link to="/buy/offer" class="ui fluid button basic">
-							Leave offer
+							<i class="icon money"></i> Leave offer
 						</router-link><br/>
 						<router-link to="/contact/" class="ui fluid button basic">
-							Contact seller
+							<i class="icon mail outline"></i> Contact seller
 						</router-link><br/>
 					</div>
 				</div>
@@ -145,7 +147,7 @@ export default {
 #item-price {
 	font-size: 36pt;
 	font-weight: 300;
-	margin-bottom: 40px;
+	// margin-bottom: 40px;
 }
 
 .item-actions .button {
