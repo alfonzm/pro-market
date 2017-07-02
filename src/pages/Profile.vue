@@ -1,5 +1,104 @@
 <template>
-	<div>
-		<h1>Profile</h1>
+	<div id="profile" class="ui stackable grid">
+		<div class="four wide column">
+			<img src="https://placeimg.com/480/480/tech" class="ui image rounded" />
+			<h1 class="ui header">
+				Alphonsus
+			</h1>
+			<div class="ui large list" id="bio-items">
+				<div class="item">
+					<strong>IGN:</strong> Alphonsus, AlfonzM
+				</div>
+				<div class="item">
+					<strong>Server: </strong> Thor
+				</div>
+				<div class="item">
+					<strong>Join date: </strong> June 25, 2017
+				</div>
+				<div class="item">
+					<strong>Last active: </strong> 3 days ago
+				</div>
+			</div>
+			<div class="ui divider"></div>
+			<p><router-link to="/msg" class="ui button large fluid green">Contact user</router-link></p>
+			<p><router-link to="/msg" class="ui button large fluid basic">Report user</router-link></p>
+		</div>
+		<div class="twelve wide column">
+			<div class="ui secondary pointing massive menu">
+				<a :class="['item', { active: activeTab == 'overview' }]" @click.prevent="setActiveTab('overview')">
+					Overview
+				</a>
+				<a :class="['item', { active: activeTab == 'selling' }]" @click.prevent="setActiveTab('selling')">
+					Selling
+				</a>
+				<a :class="['item', { active: activeTab == 'buying' }]" @click.prevent="setActiveTab('buying')">
+					Buying
+				</a>
+			</div>
+			<div>
+				<div v-if="activeTab == 'overview'">
+					<div class="ui grid stackable">
+						<div class="eight wide column">
+							<div class="ui segment">
+								IGNs:
+
+							</div>
+						</div>
+						<div class="eight wide column">
+							<div class="ui segment">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div v-else-if="activeTab == 'selling'">
+					<h1 class="ui header">
+						Coming soon!
+						<div class="sub header">
+							This feature is still under construction.
+						</div>
+					</h1>
+				</div>
+				<div v-else-if="activeTab == 'buying'">
+					<h1 class="ui header">
+						Coming soon!
+						<div class="sub header">
+							This feature is still under construction.
+						</div>
+					</h1>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
+
+<script>
+export default {
+	mounted() {
+
+	},
+	data() {
+		return {
+			activeTab: 'overview',
+		}
+	},
+	methods: {
+		setActiveTab(tab) {
+			this.activeTab = tab
+		}
+	},
+}
+</script>
+
+<style lang="scss">
+#profile {
+	.ui.list#bio-items > .item {
+		padding-bottom: 4px;
+	}
+
+	#bio-items {
+		color: #666;
+		margin: 0;
+	}
+}
+</style>

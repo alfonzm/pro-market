@@ -45,6 +45,9 @@
 					<div class="six wide column item-actions">
 						<h1 class="ui header centered" id="item-price">
 							{{ itemPrice }} zeny
+							<div class="sub header">
+								Price
+							</div>
 						</h1>
 
 						<router-link to="/buy/" class="ui fluid button green">

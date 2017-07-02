@@ -13,6 +13,9 @@
 				<img :src="loggedUser.photoURL" class="ui avatar image">
 			</div>
 			<div class="menu">
+				<span class="item">Signed in as <strong>user.name</strong></span>
+				<div class="ui divider"></div>
+				
 				<router-link to="/profile" class="item">Profile</router-link>
 				<router-link to="/messages" class="item">Messages (1)</router-link>
 				<div class="ui divider"></div>

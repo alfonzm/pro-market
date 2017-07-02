@@ -53,7 +53,7 @@ export default {
 
 <style lang="scss">
 // * {
-// 	font-family: 'Lato' !important
+// 	font-family: 'Open Sans' !important
 // }
 
 main {

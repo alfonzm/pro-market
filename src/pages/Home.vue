@@ -29,12 +29,25 @@
 		</div>
 
 		<!-- Popular items list -->
-		<h1>Latest ({{ serverSetting | capitalize }})</h1>
-		<div v-if="loadingLatestItems">
-			Loading...
+		<div class="ui grid">
+			<!-- Latest items list -->
+			<div class="ten wide column">
+				<h1>Latest items ({{ serverSetting | capitalize }})</h1>
+
+				<!-- Loading items -->
+				<div v-if="loadingLatestItems">
+					Loading...
+				</div>
+				<!-- Display list items -->
+				<div v-else>
+					<pro-item-listing-list :items="latestItems" />
+					<router-link :to="'/sell/' + serverSetting">View all...</router-link>
+				</div>
+			</div>
+			<div class="six wide column">
+				<h1>Sidebar</h1>
+			</div>
 		</div>
-		<pro-item-listing-list v-else :items="latestItems" />
-		<router-link :to="'/sell/' + serverSetting">View all...</router-link>
 	</div>
 </template>
 
@@ -76,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss">
-#home .segment {
+#home header.segment {
 	padding: 50px 0;
 }
 </style>
