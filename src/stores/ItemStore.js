@@ -15,6 +15,27 @@ function reverseAndSortByKey(arr) {
 }
 
 export default {
+	createItem(item, server, callback) {
+		var newSellItemRef = FirebaseStore.db
+			.ref('sellItems')
+			.child(server)
+			.push()
+
+		item.createdAt = firebase.database.ServerValue.TIMESTAMP
+
+		newSellItemRef.set(item, (err) => {
+			if(err) {
+				console.log(err)
+				return
+			}
+
+			item.id = newSellItemRef.key
+
+			UserStore.addSellItemToUserByUserId(item.userId, newSellItemRef.key, () => {
+				callback(item)
+			})
+		})
+	},
 	getLatestItems(server, limit = 10, callback) {
 		FirebaseStore.db
 			.ref('sellItems')
@@ -34,6 +55,9 @@ export default {
 			.once('value', (data) => {
 				callback(reverseAndSortByKey(data.val()) || [])
 			})
+	},
+	getItemsBySearchTerm(searchTerm, callback) {
+		// TODO
 	},
 	getItemWithUserById(objectKey, callback) {
 		var item = {}

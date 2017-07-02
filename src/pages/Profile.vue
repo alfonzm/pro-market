@@ -7,7 +7,7 @@
 			</h1>
 			<div class="ui large list" id="bio-items">
 				<div class="item">
-					<strong>IGN:</strong> Alphonsus, AlfonzM
+					<strong>IGN:</strong> Alphonsus, AlfonzM, +3 others
 				</div>
 				<div class="item">
 					<strong>Server: </strong> Thor
@@ -37,18 +37,32 @@
 			</div>
 			<div>
 				<div v-if="activeTab == 'overview'">
-					<div class="ui grid stackable">
-						<div class="eight wide column">
-							<div class="ui segment">
-								IGNs:
-
-							</div>
+					<div id="overview-characters">
+						<h2 class="ui dividing header">
+							Characters
+						</h2>
+						<div class="ui large labels">
+							<a class="ui blue image label">
+								Alphonsus
+								<div class="detail">Knight</div>
+							</a>
+							<a class="ui orange image label">
+								AlfonzM
+								<div class="detail">Priest</div>
+							</a>
+							<a class="ui teal image label">
+								Saint Alphonsus
+								<div class="detail">Merchant</div>
+							</a>
 						</div>
-						<div class="eight wide column">
-							<div class="ui segment">
-								
-							</div>
-						</div>
+					</div>
+					<br><br><br>
+					<div class="overview-location">
+						<h2 class="ui header">
+							Favorite Spot
+						</h2>
+						<div class="ui divider"></div>
+						<p>Payon Cave Entrance</p>
 					</div>
 				</div>
 				<div v-else-if="activeTab == 'selling'">
@@ -99,6 +113,10 @@ export default {
 	#bio-items {
 		color: #666;
 		margin: 0;
+	}
+
+	#overview-characters {
+		padding-top: 20px;
 	}
 }
 </style>

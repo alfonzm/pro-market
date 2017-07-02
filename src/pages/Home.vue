@@ -16,8 +16,8 @@
 				<div class="twelve wide column">
 					<div class="ui fluid action input left icon">
 						<i class="search icon"></i>
-						<input type="text" placeholder="Search: ex. Red Potions, Slotted Muffler, +7 Quad Bloody Main Gauche">
-						<div class="ui large basic button">Search</div>
+						<input type="text" placeholder="Search: ex. Red Potions, Slotted Muffler, +7 Quad Bloody Main Gauche" v-model="searchTerm">
+						<div class="ui large button" @click="search()">Search</div>
 					</div>
 				</div>
 				<div class="four wide column">
@@ -52,7 +52,7 @@
 
 <script>
 import ItemListingList from '../components/ItemListingList.vue'
-import ItemsStore from '../stores/ItemsStore'
+import ItemStore from '../stores/ItemStore'
 import UserStore from '../stores/UserStore'
 import _ from 'lodash'
 
@@ -61,7 +61,8 @@ export default {
 		return {
 			serverSetting: UserStore.getServer(),
 			latestItems: [],
-			loadingLatestItems: true
+			loadingLatestItems: true,
+			searchTerm: ''
 		}
 	},
 	mounted() {
@@ -75,10 +76,19 @@ export default {
 		loadLatestItems() {
 			this.loadingLatestItems = true
 
-			ItemsStore.getLatestItems(UserStore.getServer(), 5, (items) => {
-				this.latestItems = items
+			ItemStore.getLatestItems(UserStore.getServer(), 5, (items) => {
+				var latestItems = _.map(items, (item, key) => {
+					item.id = key
+					return item
+				})
+				latestItems = _.reverse(latestItems)
+
+				this.latestItems = latestItems
 				this.loadingLatestItems = false
 			})
+		},
+		search() {
+			this.$router.push('/search/' + this.searchTerm)
 		}
 	},
 	components: {

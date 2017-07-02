@@ -5,6 +5,7 @@ const Preferences = require('./pages/Preferences.vue')
 const SellForm = require('./pages/SellForm.vue')
 const SellItem = require('./pages/SellItem.vue')
 const SellItemList = require('./pages/SellItemList.vue')
+const Search = require('./pages/Search.vue')
 
 export default [
 	{
@@ -34,5 +35,9 @@ export default [
 	{
 		path: '/sell/item/:sellItemId',
 		component: SellItem
+	},
+	{
+		path: '/search/:searchTerm',
+		component: Search
 	},
 ]

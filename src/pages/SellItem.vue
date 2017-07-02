@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<!-- <pre>{{ item }}</pre>
-		<pre>{{ user }}</pre> -->
-
 		<template v-if="!item.id || !user.name">
 			Loading...
 		</template>
@@ -69,7 +66,7 @@
 </template>
 
 <script>
-import ItemsStore from '../stores/ItemsStore'
+import ItemStore from '../stores/ItemStore'
 import UserStore from '../stores/UserStore'
 import numeral from 'numeral'
 import moment from 'moment'
@@ -79,7 +76,7 @@ export default {
 		this.item = this.$store.state.selectedItem
 
 		if(!this.item.id) {
-			ItemsStore.getItemWithUserById(this.$route.params.sellItemId, (item) => {
+			ItemStore.getItemWithUserById(this.$route.params.sellItemId, (item) => {
 				item.id = this.$route.params.sellItemId
 				this.item = item
 				this.user = item.user

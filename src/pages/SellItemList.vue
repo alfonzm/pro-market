@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ItemsStore from '../stores/ItemsStore'
+import ItemStore from '../stores/ItemStore'
 
 export default {
 	data() {
@@ -20,7 +20,7 @@ export default {
 		}
 	},
 	mounted() {
-		ItemsStore.getItems(this.$route.params.server, 20, (items) => {
+		ItemStore.getItems(this.$route.params.server, 20, (items) => {
 			this.items = items
 		})
 	}

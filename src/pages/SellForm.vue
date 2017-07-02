@@ -79,6 +79,7 @@
 <script>
 import firebase from 'firebase'
 import FirebaseStore from '../stores/FirebaseStore'
+import ItemStore from '../stores/ItemStore'
 import UserStore from '../stores/UserStore'
 
 const db = FirebaseStore.db
@@ -124,17 +125,8 @@ export default {
 			this.server = $('#server.dropdown').dropdown('get value') || null
 			this.submitting = true
 
-			var newSellItemRef = sellItemsRef.child(this.server).push()
-
-			this.newItem.createdAt = firebase.database.ServerValue.TIMESTAMP
-
-			newSellItemRef.set(this.newItem, (err) => {
-				if(err) {
-					console.log(err)
-					return
-				}
-
-				this.$router.push('/sell/item/' + newSellItemRef.key)
+			ItemStore.createItem(this.newItem, this.server, (createdItem) => {
+				this.$router.push('/sell/item/' + createdItem.id)
 			})
 		},
 		setServer(server){
