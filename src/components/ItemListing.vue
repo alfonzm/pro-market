@@ -1,7 +1,7 @@
 <template>
 	<div class="item-listing">
 		<h3 class="ui header">
-			{{ title }}
+			{{ name }}
 			<div class="sub header">Price: {{ price }} / Qty: {{ quantity }}</div>
 		</h3>
 	</div>
@@ -10,7 +10,7 @@
 <script>
 	export default {
 		props: [
-			'title',
+			'name',
 			'quantity',
 			'price',
 			'description',

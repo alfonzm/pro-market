@@ -34,7 +34,7 @@
 
 <script>
 import firebase from 'firebase'
-import UserStore from '../helpers/UserStore'
+import UserStore from '../stores/UserStore'
 
 export default {
 	props: [

@@ -3,7 +3,7 @@
 		<!-- Masthead -->
 		<header class="ui container center aligned segment">
 			<h1 class="ui header">
-				pRO Marketplace {{ this.$parent.test }}
+				Sell / Buy / Trade Items
 				<div class="sub header">
 					The best place to buy and sell stuff in Ragnarok Online Philippines!
 				</div>
@@ -34,14 +34,14 @@
 			Loading...
 		</div>
 		<pro-item-listing-list v-else :items="latestItems" />
-		<router-link :to="'/sell/items/' + serverSetting">View all...</router-link>
+		<router-link :to="'/sell/' + serverSetting">View all...</router-link>
 	</div>
 </template>
 
 <script>
 import ItemListingList from '../components/ItemListingList.vue'
-import ItemsStore from '../helpers/ItemsStore'
-import UserStore from '../helpers/UserStore'
+import ItemsStore from '../stores/ItemsStore'
+import UserStore from '../stores/UserStore'
 import _ from 'lodash'
 
 export default {

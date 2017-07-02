@@ -4,6 +4,7 @@ const Profile = require('./pages/Profile.vue')
 const Preferences = require('./pages/Preferences.vue')
 const SellForm = require('./pages/SellForm.vue')
 const SellItem = require('./pages/SellItem.vue')
+const SellItemList = require('./pages/SellItemList.vue')
 
 export default [
 	{
@@ -27,7 +28,11 @@ export default [
 		component: SellForm,
 	},
 	{
-		path: '/sell/:sellItemId',
+		path: '/sell/:server',
+		component: SellItemList,
+	},
+	{
+		path: '/sell/item/:sellItemId',
 		component: SellItem
 	},
 ]

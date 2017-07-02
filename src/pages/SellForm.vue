@@ -6,8 +6,8 @@
 		</h1>
 		<div :class="['ui form', formSize, { loading: submitting }]">
 			<div class="required field">
-				<label>Title</label>
-				<input v-model="newItem.title" type="text" placeholder="ex. +10 Main Gauche">
+				<label>Name</label>
+				<input v-model="newItem.name" type="text" placeholder="ex. +10 Main Gauche">
 			</div>
 			<div class="required five wide field">
 				<label>Server</label>
@@ -78,8 +78,8 @@
 
 <script>
 import firebase from 'firebase'
-import FirebaseStore from '../helpers/FirebaseStore'
-import UserStore from '../helpers/UserStore'
+import FirebaseStore from '../stores/FirebaseStore'
+import UserStore from '../stores/UserStore'
 
 const db = FirebaseStore.db
 const sellItemsRef = db.ref('sellItems')
@@ -94,7 +94,7 @@ export default {
 			serverSetting: UserStore.getServer(),
 
 			newItem: {
-				title: null,
+				name: null,
 				quantity: 1,
 				acceptOffers: false,
 				acceptTrades: false,
@@ -126,7 +126,7 @@ export default {
 
 			var newSellItemRef = sellItemsRef.child(this.server).push()
 
-			this.newItem.created_at = firebase.database.ServerValue.TIMESTAMP
+			this.newItem.createdAt = firebase.database.ServerValue.TIMESTAMP
 
 			newSellItemRef.set(this.newItem, (err) => {
 				if(err) {
@@ -134,7 +134,7 @@ export default {
 					return
 				}
 
-				this.$router.push('/sell/' + newSellItemRef.key)
+				this.$router.push('/sell/item/' + newSellItemRef.key)
 			})
 		},
 		setServer(server){
