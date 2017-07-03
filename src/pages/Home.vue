@@ -77,18 +77,15 @@ export default {
 			this.loadingLatestItems = true
 
 			ItemStore.getLatestItems(UserStore.getServer(), 5, (items) => {
-				var latestItems = _.map(items, (item, key) => {
-					item.id = key
-					return item
-				})
-				latestItems = _.reverse(latestItems)
-
-				this.latestItems = latestItems
+				this.latestItems = items
 				this.loadingLatestItems = false
 			})
 		},
 		search() {
-			this.$router.push('/search/' + this.searchTerm)
+			this.$router.push({
+				path: 'search',
+				query: { s: this.searchTerm }
+			})
 		}
 	},
 	components: {

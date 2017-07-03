@@ -10,32 +10,39 @@
 			</div>
 		</form>
 
-		<pro-item-listing-list :items="searchResultItems" class="search-results-item-list" :loading="loading" />
+		<pro-item-listing-list :items="items" class="search-results-item-list" :loading="loading" />
 	</div>
 </template>
 
 <script>
 import ItemListingList from '../components/ItemListingList.vue'
 import ItemStore from '../stores/ItemStore'
+import UserStore from '../stores/UserStore'
 import numeral from 'numeral'
 import moment from 'moment'
 import _ from 'lodash'
 
 export default {
 	mounted() {
-		this.searchTerm = this.$route.params.searchTerm
+		this.searchTerm = this.$route.query.s
+		this.search()
 	},
 	methods: {
 		search() {
-			ItemStore.getItemsBySearchTerm(this.searchTerm, (items) => {
+			this.loading = true
+			this.$router.replace({
+				path: 'search',
+				query: { s: this.searchTerm }
+			})
+			ItemStore.getLatestItems(UserStore.getServer(), 10, (items) => {
 				this.items = items
+				this.loading = false
 			})
 		}
 	},
 	data() {
 		return {
 			searchTerm: '',
-			searchResultItems: {},
 			items: [],
 			loading: true
 		}

@@ -4,14 +4,12 @@ import UserStore from './UserStore'
 import firebase from 'firebase'
 import _ from 'lodash'
 
-function sortByKey(arr){
-	return _(arr).toPairs().sortBy(0).fromPairs().value()
-}
-
-function reverseAndSortByKey(arr) {
-	return _.reverse(
-				sortByKey(arr)
-			)
+function convertObjectsToArray(items){
+	return _.map(items, (item, key) => 
+		{
+			item.id = key
+			return item
+		})
 }
 
 export default {
@@ -43,7 +41,7 @@ export default {
 			.limitToLast(limit)
 			.orderByKey()
 			.once('value', (data) => {
-				callback(reverseAndSortByKey(data.val()) || [])
+				callback(_.reverse(convertObjectsToArray(data.val())) || [])
 			})
 	},
 	getItems(server, limit = 20, callback) {
@@ -53,11 +51,22 @@ export default {
 			.limitToLast(limit)
 			.orderByKey()
 			.once('value', (data) => {
-				callback(reverseAndSortByKey(data.val()) || [])
+				callback(_.reverse(convertObjectsToArray(data.val())) || [])
 			})
 	},
-	getItemsBySearchTerm(searchTerm, callback) {
-		// TODO
+	getItemsBySearchTerm(searchTerm, server, callback) {
+		// TODO: implement search
+		// currently same as getItems
+		var limit = 20
+
+		FirebaseStore.db
+			.ref('sellItems')
+			.child(server)
+			.limitToLast(limit)
+			.orderByKey()
+			.once('value', (data) => {
+				callback(_.reverse(convertObjectsToArray(data.val())) || [])
+			})
 	},
 	getItemWithUserById(objectKey, callback) {
 		var item = {}

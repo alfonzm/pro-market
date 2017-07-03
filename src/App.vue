@@ -56,17 +56,25 @@ export default {
 // 	font-family: 'Open Sans' !important
 // }
 
-main {
-	margin-top: 120px
-}
 
 body {
 	background-color: #fafafa;
+	height: 100%;
+
+	#app {
+		height: 100%;
+	}
+
+	main {
+		padding-top: 120px;
+		height: 100%;
+	}
+
+	#site-title {
+		font-weight: 400;
+		font-size: 14pt;
+	}
 }
 
-#site-title {
-	font-weight: 400;
-	font-size: 14pt;
-}
 
 </style>

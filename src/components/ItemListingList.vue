@@ -1,5 +1,6 @@
 <template>
 	<div id="item-listing">
+		<!-- <pre>{{ items }}</pre> -->
 		<div v-if="loading">
 			<template v-if="loading">
 				<br/>

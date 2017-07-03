@@ -6,6 +6,7 @@ const SellForm = require('./pages/SellForm.vue')
 const SellItem = require('./pages/SellItem.vue')
 const SellItemList = require('./pages/SellItemList.vue')
 const Search = require('./pages/Search.vue')
+const Messages = require('./pages/Messages.vue')
 
 export default [
 	{
@@ -37,7 +38,11 @@ export default [
 		component: SellItem
 	},
 	{
-		path: '/search/:searchTerm',
+		path: '/search',
 		component: Search
+	},
+	{
+		path: '/messages',
+		component: Messages
 	},
 ]

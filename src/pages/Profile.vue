@@ -66,20 +66,10 @@
 					</div>
 				</div>
 				<div v-else-if="activeTab == 'selling'">
-					<h1 class="ui header">
-						Coming soon!
-						<div class="sub header">
-							This feature is still under construction.
-						</div>
-					</h1>
+					<pro-coming-soon />
 				</div>
 				<div v-else-if="activeTab == 'buying'">
-					<h1 class="ui header">
-						Coming soon!
-						<div class="sub header">
-							This feature is still under construction.
-						</div>
-					</h1>
+					<pro-coming-soon />
 				</div>
 			</div>
 		</div>
@@ -87,6 +77,8 @@
 </template>
 
 <script>
+import ComingSoon from '../components/ComingSoon.vue'
+
 export default {
 	mounted() {
 
@@ -101,6 +93,9 @@ export default {
 			this.activeTab = tab
 		}
 	},
+	components: {
+		'pro-coming-soon': ComingSoon
+	}
 }
 </script>
 
