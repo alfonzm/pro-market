@@ -3,17 +3,19 @@
 		<nav class="ui top fixed borderless menu">
 			<div class="ui container">
 				<router-link to="/" class="header item">
-					<span id="site-title">RAGNAMARKET.PH</span>
-				</router-link>
+				<span id="site-title">RAGNAMARKET.PH</span>
+			</router-link>
 
-				<pro-user-menu :loggedUser="loggedUser"></pro-user-menu>
-			</div>
-		</nav>
+			<pro-user-menu :loggedUser="loggedUser"></pro-user-menu>
+		</div>
+	</nav>
 
-		<main class="ui container">
-			<router-view></router-view>
-		</main>
-	</div>
+	<main class="ui container">
+		<router-view></router-view>
+	</main>
+
+	<vue-progress-bar></vue-progress-bar>
+</div>
 </template>
 
 <script>
@@ -44,6 +46,21 @@ export default {
 			})
 		}, () => {
 			this.loggedUser = null
+		})
+
+		this.$Progress.start()
+
+		this.$router.beforeEach((to, from, next) => {
+			if (to.meta.progress !== undefined) {
+				let meta = to.meta.progress
+				this.$Progress.parseMeta(meta)
+			}
+
+			this.$Progress.start()
+			next()
+		})
+		this.$router.afterEach((to, from) => {
+			this.$Progress.finish()
 		})
 	},
 	methods: {

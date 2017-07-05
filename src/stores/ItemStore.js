@@ -1,16 +1,9 @@
 import Config from '../Config'
+import Helpers from '../helpers/Helpers'
 import FirebaseStore from './FirebaseStore'
 import UserStore from './UserStore'
 import firebase from 'firebase'
 import _ from 'lodash'
-
-function convertObjectsToArray(items){
-	return _.map(items, (item, key) => 
-		{
-			item.id = key
-			return item
-		})
-}
 
 export default {
 	createItem(item, server, callback) {
@@ -41,7 +34,7 @@ export default {
 			.limitToLast(limit)
 			.orderByKey()
 			.once('value', (data) => {
-				callback(_.reverse(convertObjectsToArray(data.val())) || [])
+				callback(_.reverse(Helpers.convertObjectsToArray(data.val())) || [])
 			})
 	},
 	getItems(server, limit = 20, callback) {
@@ -51,7 +44,7 @@ export default {
 			.limitToLast(limit)
 			.orderByKey()
 			.once('value', (data) => {
-				callback(_.reverse(convertObjectsToArray(data.val())) || [])
+				callback(_.reverse(Helpers.convertObjectsToArray(data.val())) || [])
 			})
 	},
 	getItemsBySearchTerm(searchTerm, server, callback) {
@@ -65,7 +58,7 @@ export default {
 			.limitToLast(limit)
 			.orderByKey()
 			.once('value', (data) => {
-				callback(_.reverse(convertObjectsToArray(data.val())) || [])
+				callback(_.reverse(Helpers.convertObjectsToArray(data.val())) || [])
 			})
 	},
 	getItemWithUserById(objectKey, callback) {

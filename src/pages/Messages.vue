@@ -10,22 +10,10 @@
 							<i class="search icon"></i>
 						</div>
 					</div>
-					<a class="item active threads-item">
+					<a class="item threads-item" v-for="thread in threads">
 						<h4 class="ui header inline">
 							<img class="ui image avatar" src="http://placeimg.com/480/480/fruits" />
 							<span class="threads-item-title">Indy <span class="ui teal circular label">1</span></span>
-						</h4>
-					</a>
-					<a class="item threads-item">
-						<h4 class="ui header inline">
-							<img class="ui image avatar" src="http://placeimg.com/480/480" />
-							<span class="threads-item-title read">Testo</span>
-						</h4>
-					</a>
-					<a class="item threads-item">
-						<h4 class="ui header inline">
-							<img class="ui image avatar" src="http://placeimg.com/480/480" />
-							<span class="threads-item-title read">Hello World</span>
 						</h4>
 					</a>
 				</div>
@@ -115,8 +103,21 @@
 
 <script>
 import ComingSoon from '../components/ComingSoon.vue'
+import MessageStore from '../stores/MessageStore'
+import FirebaseStore from '../stores/FirebaseStore'
+import firebase from 'firebase'
 
 export default {
+	mounted() {
+		FirebaseStore.checkLoggedIn((user) => {
+			MessageStore.getThreadsByUserId(user.uid, (threads) => {
+				this.threads = threads
+				console.log(this.threads)
+			})
+		}, (error) => {
+			console.log('error')
+		})
+	},
 	data() {
 		return {
 			threads: [],

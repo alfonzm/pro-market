@@ -44,7 +44,7 @@
 				</div>
 			</div>
 			<div class="six wide column">
-				<h1>Sidebar</h1>
+				<h1>Tags</h1>
 			</div>
 		</div>
 	</div>

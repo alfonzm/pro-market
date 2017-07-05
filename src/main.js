@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import VueProgressBar from 'vue-progressbar'
 import Config from './Config'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
@@ -16,6 +17,7 @@ import Home from './pages/Home.vue'
 Vue.use(VueRouter)
 Vue.use(VueFire)
 Vue.use(Vue2Filters)
+Vue.use(VueProgressBar)
 
 // Router
 const router = new VueRouter({
