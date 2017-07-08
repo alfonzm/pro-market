@@ -1,21 +1,18 @@
 {
   "rules": {
     "sellItems": {
+      // items are public
+      ".read": true,
+
       "$server": {
         "$item_id": {
           // only logged in user and owner can edit item
-          ".write": "newData.child('userId').val() === auth.uid && newData.exists()",
+          ".write": "auth !== null && newData.child('userId').val() === auth.uid && newData.exists()",
 
-          // required item fields
-          ".validate": "newData.hasChildren([
-            'name',
-            'userId',
-            'quantity',
-            'acceptOffers',
-            'acceptTrades',
-            'updatedAt',
-            'createdAt'
-          ])",
+          // TODO: required item fields
+          // timestamp cannot be future
+          // use firebase.database.ServerValue.TIMESTAMP
+          "createdAt": { ".validate": "newData.val() <= now" },
 
           // new item must be added by logged in user
           "userId": { ".validate": "newData.val() === auth.uid" }
@@ -24,8 +21,11 @@
     },
     "thread_members": {
       "$thread_id": {
+        // only members can view thread members info
+        ".read": "data.child(auth.uid).exists()",
+
         // thread must exist to add thread members
-        ".validate": "root.child('threads/' + $thread_id).exists()",
+        ".validate": "root.child('threads/' + $thread_id).exists()"
       }
     },
     "threads": {
@@ -57,15 +57,17 @@
           }
         }
       }
-    }
-  },
-  "users": {
-    "$uid": {
-      // only logged in user can edit his user details
-      ".write": "auth.uid === $uid",
+    },
+    "users": {
+      "$uid": {
+        ".read": true,
 
-      // only owner can read his own threads array
-      "threads": { ".read": "auth.uid === $uid" }
+        // only logged in user can edit his user details
+        ".write": "auth.uid === $uid"
+
+        // only owner can read his own threads array
+        // "threads": { ".read": "auth.uid === $uid" }
+      }
     }
   }
 }
