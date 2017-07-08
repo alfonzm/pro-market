@@ -3,92 +3,12 @@
 		<h1>Messages</h1>
 		<div class="ui grid divided relaxed stackable">
 			<div class="five wide column" id="threads">
-				<div class="ui secondary vertical fluid menu">
-					<div class="item">
-						<div class="ui transparent icon input">
-							<input type="text" placeholder="Search messages...">
-							<i class="search icon"></i>
-						</div>
-					</div>
-					<a class="item threads-item" v-for="thread in threads">
-						<h4 class="ui header inline">
-							<img class="ui image avatar" src="http://placeimg.com/480/480/fruits" />
-							<span class="threads-item-title">Indy <span class="ui teal circular label">1</span></span>
-						</h4>
-					</a>
-				</div>
+				<pro-thread-list :threads="threads" />
 			</div>
 			<div class="eleven wide column" id="convo">
-				<div class="ui large feed">
-					<!-- Message -->
-					<div class="event convo-message">
-						<div class="label">
-							<img src="http://placeimg.com/480/480/sports">
-						</div>
-						<div class="content convo-content">
-							<div class="summary">
-								You
-								<div class="date">
-									11:20 AM
-								</div>
-							</div>
-							<p class="extra text convo-text">
-								Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps that day, we surely will come back for more of the same another day soon.
-							</p>
-						</div>
-					</div>
-					<!-- Message -->
-					<div class="event convo-message">
-						<div class="label">
-							<img src="http://placeimg.com/480/480/sports">
-						</div>
-						<div class="content convo-content">
-							<div class="summary">
-								You
-								<div class="date">
-									11:20 AM
-								</div>
-							</div>
-							<p class="extra text convo-text">
-								Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps that day, we surely will come back for more of the same another day soon.
-							</p>
-						</div>
-					</div>
-					<!-- Message -->
-					<div class="event convo-message">
-						<div class="label">
-							<img src="http://placeimg.com/480/480/space">
-						</div>
-						<div class="content convo-content">
-							<div class="summary">
-								Indy
-								<div class="date">
-									12:20 AM
-								</div>
-							</div>
-							<p class="extra text convo-text">
-								120k for Gakkung
-							</p>
-						</div>
-					</div>
-					<!-- Message -->
-					<div class="event convo-message">
-						<div class="label">
-							<img src="http://placeimg.com/480/480/sports">
-						</div>
-						<div class="content convo-content">
-							<div class="summary">
-								Indy
-								<div class="date">
-									12:20 AM
-								</div>
-							</div>
-							<p class="extra text convo-text">
-								Ok deal!
-							</p>
-						</div>
-					</div>
-				</div>
+				<!-- messages -->
+				<pro-thread-messages :messages="messages" />
+
 				<!-- end feed -->
 				<div class="ui fluid big action input convo-messagebox">
 					<input type="text" placeholder="Type a message...">
@@ -102,33 +22,52 @@
 </template>
 
 <script>
-import ComingSoon from '../components/ComingSoon.vue'
 import MessageStore from '../stores/MessageStore'
 import FirebaseStore from '../stores/FirebaseStore'
+import ThreadList from '../components/ThreadList.vue'
+import ThreadMessages from '../components/ThreadMessages.vue'
 import firebase from 'firebase'
 
 export default {
-	mounted() {
-		FirebaseStore.checkLoggedIn((user) => {
-			MessageStore.getThreadsByUserId(user.uid, (threads) => {
-				this.threads = threads
-				console.log(this.threads)
+	created() {
+		// Watch for selected thread change
+		this.$store.watch((state) => {
+			return state.selectedThread
+		}, () => {
+			// if user clicks on thread, load the messaes
+			var thread = this.$store.state.selectedThread
+			console.log("MEMBERS", this.$store.state.selectedThreadMembers)
+			
+			MessageStore.getMessagesByThreadId(thread.id, 0, 20, (messages) => {
+				this.messages = messages
 			})
-		}, (error) => {
-			console.log('error')
 		})
+	},
+	mounted() {
+		this.loadThreads()
 	},
 	data() {
 		return {
 			threads: [],
-			selectedThread: {}
+			messages: []
 		}
 	},
 	methods: {
+		loadThreads() {
+			FirebaseStore.checkLoggedIn((user) => {
+				MessageStore.getThreadsByUserId(user.uid, (threads) => {
+					this.threads = threads
+					this.$store.commit('setThreads', threads)
+				})
+			}, (error) => {
+				console.log('error')
+			})
+		},
 	},
 	components: {
-		'pro-coming-soon': ComingSoon
-	}
+		'pro-thread-list': ThreadList,
+		'pro-thread-messages': ThreadMessages
+	},
 }
 </script>
 

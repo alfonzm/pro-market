@@ -17,12 +17,6 @@ export default {
 			callback(err)
 		})
 	},
-	getServer() {
-		return Cookies.get('server') || 'loki'
-	},
-	setServer(server) {
-		Cookies.set('server', server)
-	},
 	getUserById(userId, callback) {
 		FirebaseStore.db
 			.ref('users')

@@ -92,7 +92,7 @@ export default {
 			formSize: 'large',
 			server: null,
 			submitting: false,
-			serverSetting: UserStore.getServer(),
+			serverSetting: this.$store.state.serverSetting,
 
 			newItem: {
 				name: null,

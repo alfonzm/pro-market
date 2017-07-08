@@ -34,7 +34,7 @@ export default {
 				path: 'search',
 				query: { s: this.searchTerm }
 			})
-			ItemStore.getLatestItems(UserStore.getServer(), 10, (items) => {
+			ItemStore.getLatestItems(this.$store.state.serverSetting, 10, (items) => {
 				this.items = items
 				this.loading = false
 			})

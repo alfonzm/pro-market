@@ -13,7 +13,7 @@
 				<img :src="loggedUser.photoURL" class="ui avatar image">
 			</div>
 			<div class="menu">
-				<span class="item">Signed in as <strong>user.name</strong></span>
+				<span class="item">Hi, <strong>{{ loggedUser.displayName }}</strong></span>
 				<div class="ui divider"></div>
 				
 				<router-link to="/profile" class="item">Profile</router-link>
@@ -49,13 +49,14 @@ export default {
 		}
 	},
 	watch: {
-		server: (newServer, oldServer) => {
-			UserStore.setServer(newServer)
-			bus.$emit('change-server-setting', newServer)
+		server: function(newServer, oldServer) {
+			if(newServer != oldServer) {
+				this.$store.commit('setServerSetting', newServer)
+			}
 		}
 	},
 	mounted() {
-		this.server = UserStore.getServer()
+		this.server = this.$store.state.serverSetting
 
 		firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {

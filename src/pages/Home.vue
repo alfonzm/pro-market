@@ -59,7 +59,7 @@ import _ from 'lodash'
 export default {
 	data() {
 		return {
-			serverSetting: UserStore.getServer(),
+			serverSetting: this.$store.state.serverSetting,
 			latestItems: [],
 			loadingLatestItems: true,
 			searchTerm: ''
@@ -67,16 +67,20 @@ export default {
 	},
 	mounted() {
 		this.loadLatestItems()
-		bus.$on('change-server-setting', (newServer) => {
+		this.$store.watch((state) => {
+			// watch server setting change
+			return state.serverSetting
+		}, () => {
+			// on server setting change
 			this.loadLatestItems()
-			this.serverSetting = newServer
+			this.serverSetting = this.$store.state.serverSetting
 		})
 	},
 	methods: {
 		loadLatestItems() {
 			this.loadingLatestItems = true
 
-			ItemStore.getLatestItems(UserStore.getServer(), 5, (items) => {
+			ItemStore.getLatestItems(this.$store.state.serverSetting, 5, (items) => {
 				this.latestItems = items
 				this.loadingLatestItems = false
 			})

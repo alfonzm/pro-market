@@ -22,6 +22,7 @@
 import firebase from 'firebase'
 import UserMenu from './components/UserMenu.vue'
 import FirebaseStore from './stores/FirebaseStore'
+import Cookies from 'cookies-js'
 
 const db = FirebaseStore.db
 
@@ -36,14 +37,17 @@ export default {
 		'pro-user-menu': UserMenu
 	},
 	created() {
+		var serverFromCookie = Cookies.get('server') || 'loki'
+		this.$store.commit('setServerSetting', serverFromCookie)
+
 		FirebaseStore.checkLoggedIn((user) => {
 			this.loggedUser = user
 			var usersRef = db.ref('users')
-			usersRef.child(user.uid).set({
-				avatarUrl: 'https://placeimg.com/480/480/tech',
-				name: user.displayName,
-				email: user.email
-			})
+			// usersRef.child(user.uid).set({
+			// 	avatarUrl: 'https://placeimg.com/480/480/tech',
+			// 	name: user.displayName,
+			// 	email: user.email
+			// })
 		}, () => {
 			this.loggedUser = null
 		})

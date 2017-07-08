@@ -30,9 +30,6 @@ router.beforeEach((to, from, next) => {
 	next()
 })
 
-// Bus event emitter
-window.bus = new Vue();
-
 // Store
 import store from './stores/Store'
 
