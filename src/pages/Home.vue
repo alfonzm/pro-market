@@ -14,11 +14,11 @@
 		<div class="ui large stackable form">
 			<div class="ui stackable grid">
 				<div class="twelve wide column">
-					<div class="ui fluid action input left icon">
+					<form class="ui fluid action input left icon" v-on:submit.prevent="search()">
 						<i class="search icon"></i>
 						<input type="text" placeholder="Search: ex. Red Potions, Slotted Muffler, +7 Quad Bloody Main Gauche" v-model="searchTerm">
-						<div class="ui large button" @click="search()">Search</div>
-					</div>
+						<button class="ui large button" type="submit">Search</button>
+					</form>
 				</div>
 				<div class="four wide column">
 				    <router-link to="/sell" class="ui large fluid green submit button">

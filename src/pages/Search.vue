@@ -10,20 +10,36 @@
 			</div>
 		</form>
 
-		<pro-item-listing-list :items="items" class="search-results-item-list" :loading="loading" />
+		<pro-item-listing-list :items="items" class="search-results-item-list" :loading="loading" searchHighlighting="true" />
 	</div>
 </template>
 
 <script>
 import ItemListingList from '../components/ItemListingList.vue'
+import Helpers from '../helpers/Helpers'
 import ItemStore from '../stores/ItemStore'
 import UserStore from '../stores/UserStore'
-import numeral from 'numeral'
-import moment from 'moment'
-import _ from 'lodash'
+import fuzzy from 'fuzzy'
 
 export default {
+	watch: {
+		searchTerm: function(newSearchTerm, oldSearchTerm) {
+			clearTimeout(this.searchTimeout)
+			this.searchTimeout = setTimeout(this.search, 200)
+		},
+	},
+	created() {
+		// Watch for serverSetting change
+		this.$store.watch((state) => {
+			return state.serverSetting
+		}, () => {
+			// on change serverSetting
+			this.serverSetting = this.$store.state.serverSetting
+			this.search()
+		})
+	},
 	mounted() {
+		this.serverSetting = this.$store.state.serverSetting
 		this.searchTerm = this.$route.query.s
 		this.search()
 	},
@@ -34,25 +50,49 @@ export default {
 				path: 'search',
 				query: { s: this.searchTerm }
 			})
-			ItemStore.getLatestItems(this.$store.state.serverSetting, 10, (items) => {
-				this.items = items
-				this.loading = false
+
+			// Get all items of current server and cache it to the store
+			if(!this.$store.state.sellItems[this.serverSetting]) {
+				this.fetchAndCacheAllItemsOfCurrentServer(this.serverSetting)
+			} else {
+				// If already cached, refresh cache if last updated > 30 secs
+				var secondsSinceCacheLastUpdated = Math.abs(this.$store.state.sellItems.lastUpdated - Date.now())/1000
+
+				if(secondsSinceCacheLastUpdated > 30) {
+					this.fetchAndCacheAllItemsOfCurrentServer(this.serverSettingSetting)
+				} else {
+					this.filterItems()
+				}
+			}
+		},
+		filterItems() {
+			let cachedItems = Helpers.convertObjectsToArray(this.$store.state.sellItems[this.serverSetting])
+			let options = {
+				pre: '<strong>',
+				post: '</strong>',
+				extract: (el) => { return el.name }
+			}
+			let results = fuzzy.filter(this.searchTerm, cachedItems, options)
+			this.items = results.map((el) => {
+				el.original.highlightedName = el.string
+				return el.original 
+			})
+			this.loading = false
+		},
+		fetchAndCacheAllItemsOfCurrentServer() {
+			ItemStore.getAllItems(this.serverSetting, (items) => {
+				this.$store.commit('setSellItems', items, this.serverSetting)
+				this.filterItems()
 			})
 		}
 	},
 	data() {
 		return {
+			serverSetting: null,
 			searchTerm: '',
 			items: [],
-			loading: true
-		}
-	},
-	computed: {
-		numeral() {
-			return numeral
-		},
-		moment() {
-			return moment
+			loading: true,
+			searchTimeout: null,
 		}
 	},
 	components: {

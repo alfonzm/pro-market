@@ -55,6 +55,13 @@ export default {
 			}
 		}
 	},
+	created() {
+		$('.dropdown').dropdown()
+
+		setTimeout(() => {
+			$('.dropdown').dropdown()
+		}, 500)
+	},
 	mounted() {
 		this.server = this.$store.state.serverSetting
 

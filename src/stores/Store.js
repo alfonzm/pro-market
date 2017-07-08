@@ -14,6 +14,13 @@ const store = new Vuex.Store({
 		threads: [],
 		selectedThread: {},
 		selectedThreadMembers: {},
+
+		// cache of sell items used for fuzzy searching
+		sellItems: {
+			// lastUpdated: 1871826871628321,
+			// thor: [ ... ],
+			// loki: [ ... ],
+		}
 	},
 	mutations: {
 		setServerSetting(state, newServerSetting) {
@@ -33,6 +40,15 @@ const store = new Vuex.Store({
 		},
 		setThreads(state, threads) {
 			state.threads = threads
+		},
+		setSellItems(state, sellItems, server = null) {
+			state.sellItems.lastUpdated = Date.now()
+
+			if(!server) {
+				server = state.serverSetting
+			}
+
+			state.sellItems[server] = sellItems
 		}
 	}
 })

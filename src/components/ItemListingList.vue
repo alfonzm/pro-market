@@ -7,7 +7,7 @@
 				<div class="ui active centered inline text loader">Loading...</div>
 			</template>
 		</div>
-		<table class="ui very basic large unstackable table" v-else>
+		<table class="ui very basic large selectable unstackable table" v-else>
 			<!-- Header -->
 			<thead>
 				<tr>
@@ -19,16 +19,24 @@
 			<!-- If there are items -->
 			<tbody>
 				<template v-if="items.length > 0">
-					<tr v-for="item in items">
+					<tr v-for="item in items" @click="viewSellItem(item)" class="item-row">
 						<td class="one wide"><img src="http://placeimg.com/480/480/tech" class="ui image avatar"></td>
 						<td>
-							<a :href="'/sell/item/' + item.id" @click.prevent="viewSellItem(item)"><strong>{{ item.name }}</strong></a><br/>
+							<!-- <a :href="'/sell/item/' + item.id" @click.prevent="viewSellItem(item)"> -->
+								<template v-if="searchHighlighting && item.highlightedName">
+									<span class="item-highlighted-name" v-html="item.highlightedName"></span>
+								</template>
+								<template v-else>
+									<span>{{ item.name }}</span>
+								</template>
+							<!-- </a> -->
+							<br/>
 							<span class="item-username">{{ moment(item.createdAt).fromNow() }}</span>
 						</td>
 						<td class="two wide center aligned">
 							{{ item.quantity }}
 						</td>
-						<td class="three wide right aligned">
+						<td class="three wide center aligned">
 							{{ numeral(item.price).format('0,0') }}z
 						</td>
 					</tr>
@@ -62,7 +70,7 @@ import moment from 'moment'
 import _ from 'lodash'
 
 export default {
-	props: ['items', 'loading'],
+	props: ['items', 'loading', 'searchHighlighting'],
 	methods: {
 		viewSellItem(item) {
 			this.$store.commit('setSelectedItem', item)
@@ -92,6 +100,22 @@ export default {
 		font-weight: 300;
 		color: #666;
 		line-height: 2em;
+	}
+
+	// the <tr> row
+	.item-row {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	.item-highlighted-name {
+		color: #222;
+
+		strong {
+			font-weight: 900;
+			color: teal;
+		}
 	}
 }
 </style>

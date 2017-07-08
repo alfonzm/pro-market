@@ -47,6 +47,15 @@ export default {
 				callback(_.reverse(Helpers.convertObjectsToArray(data.val())) || [])
 			})
 	},
+	getAllItems(server, callback) {
+		FirebaseStore.db
+			.ref('sellItems')
+			.child(server)
+			.orderByKey()
+			.once('value', (data) => {
+				callback(data.val() || [])
+			})
+	},
 	getItemsBySearchTerm(searchTerm, server, callback) {
 		// TODO: implement search
 		// currently same as getItems
