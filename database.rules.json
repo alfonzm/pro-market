@@ -1,6 +1,71 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "sellItems": {
+      "$server": {
+        "$item_id": {
+          // only logged in user and owner can edit item
+          ".write": "newData.child('userId').val() === auth.uid && newData.exists()",
+
+          // required item fields
+          ".validate": "newData.hasChildren([
+            'name',
+            'userId',
+            'quantity',
+            'acceptOffers',
+            'acceptTrades',
+            'updatedAt',
+            'createdAt'
+          ])",
+
+          // new item must be added by logged in user
+          "userId": { ".validate": "newData.val() === auth.uid" }
+        }
+      }
+    },
+    "thread_members": {
+      "$thread_id": {
+        // thread must exist to add thread members
+        ".validate": "root.child('threads/' + $thread_id).exists()",
+      }
+    },
+    "threads": {
+      "$thread_id": {
+        // only members of thread can read thread info
+        ".read": "root.child('thread_members/' + $thread_id + '/' + auth.uid).exists()",
+
+        "messages": {
+          "$message_id": {
+            // cannot be modified or deleted
+            // member of room can write message
+            ".write": "root.child('thread_members/' + $thread_id + '/' + auth.uid).exists() && !data.exists() && newData.exists()",
+
+            // message must have userId, message and createdAt
+            ".validate": "newData.hasChildren(['userId', 'message', 'createdAt'])",
+
+            // userId must be the logged in user
+            "userId": { ".validate": "newData.val() === auth.uid" },
+
+            // message must be more than 0 chars
+            "message": { ".validate": "newData.isString() && newData.val().length > 0" },
+
+            // timestamp cannot be future
+            // use firebase.database.ServerValue.TIMESTAMP
+            "createdAt": { ".validate": "newData.val() <= now" },
+
+            // no other fields
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    }
+  },
+  "users": {
+    "$uid": {
+      // only logged in user can edit his user details
+      ".write": "auth.uid === $uid",
+
+      // only owner can read his own threads array
+      "threads": { ".read": "auth.uid === $uid" }
+    }
   }
 }
