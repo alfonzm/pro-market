@@ -11,25 +11,24 @@
 			<!-- Header -->
 			<thead>
 				<tr>
-					<th colspan="2">Item</th>
-					<th class="center aligned">Qty</th>
-					<th class="center aligned">Price</th>
+					<th class="one wide center aligned">Item</th>
+					<th>&nbsp;</th>
+					<th class="two wide center aligned">Qty</th>
+					<th class="three wide center aligned">Price</th>
 				</tr>
 			</thead>
 			<!-- If there are items -->
 			<tbody>
 				<template v-if="items.length > 0">
 					<tr v-for="item in items" @click="viewSellItem(item)" class="item-row">
-						<td class="one wide"><img src="http://placeimg.com/480/480/tech" class="ui image avatar"></td>
+						<td class="one wide center aligned"><img src="http://placeimg.com/480/480/tech" class="ui image avatar"></td>
 						<td>
-							<!-- <a :href="'/sell/item/' + item.id" @click.prevent="viewSellItem(item)"> -->
-								<template v-if="searchHighlighting && item.highlightedName">
-									<span class="item-highlighted-name" v-html="item.highlightedName"></span>
-								</template>
-								<template v-else>
-									<span>{{ item.name }}</span>
-								</template>
-							<!-- </a> -->
+							<template v-if="searchHighlighting && item.highlightedName">
+								<span class="item-highlighted-name" v-html="item.highlightedName"></span>
+							</template>
+							<template v-else>
+								<span>{{ item.name }}</span>
+							</template>
 							<br/>
 							<span class="item-username">{{ moment(item.createdAt).fromNow() }}</span>
 						</td>
@@ -37,7 +36,8 @@
 							{{ item.quantity }}
 						</td>
 						<td class="three wide center aligned">
-							{{ numeral(item.price).format('0,0') }}z
+							<template v-if="item.price">{{ numeral(item.price).format('0,0') }}z</template>
+							<template v-else>--</template>
 						</td>
 					</tr>
 				</template>
@@ -100,6 +100,7 @@ export default {
 		font-weight: 300;
 		color: #666;
 		line-height: 2em;
+		padding-left: 16px;
 	}
 
 	// the <tr> row
@@ -114,7 +115,6 @@ export default {
 
 		strong {
 			font-weight: 900;
-			color: teal;
 		}
 	}
 }

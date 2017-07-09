@@ -126,6 +126,7 @@ export default {
 			this.submitting = true
 
 			ItemStore.createItem(this.newItem, this.server, (createdItem) => {
+				this.$store.commit('setSelectedItem', createdItem)
 				this.$router.push('/sell/item/' + createdItem.id)
 			})
 		},

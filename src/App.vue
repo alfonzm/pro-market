@@ -11,7 +11,9 @@
 	</nav>
 
 	<main class="ui container">
-		<router-view></router-view>
+		<transition name="fade">
+			<router-view></router-view>
+		</transition>
 	</main>
 
 	<vue-progress-bar></vue-progress-bar>
@@ -94,6 +96,20 @@ body {
 	#site-title {
 		font-weight: 400;
 		font-size: 14pt;
+	}
+
+	// Router view transitions
+	.fade-enter-active, .fade-leave-active {
+		transition-property: opacity;
+		transition-duration: .2s;
+	}
+
+	.fade-enter-active {
+		transition-delay: 0.2s;
+	}
+
+	.fade-enter, .fade-leave-active {
+		opacity: 0
 	}
 }
 

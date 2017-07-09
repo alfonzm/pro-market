@@ -41,7 +41,12 @@
 					<!-- sidebar -->
 					<div class="six wide column item-actions">
 						<h1 class="ui header centered" id="item-price">
-							{{ itemPrice }} zeny
+							<span v-if="this.item.price">
+								{{ itemPrice }}
+							</span>
+							<span v-else style="opacity: 0.8">
+								Leave offer
+							</span>
 							<div class="sub header">
 								Price
 							</div>
@@ -111,7 +116,7 @@ export default {
 	},
 	computed: {
 		itemPrice: function() {
-			return numeral(this.item.price).format('0,0')
+			return numeral(this.item.price).format('0,0') + " zeny"
 		},
 		createdDate: function() {
 			return moment(this.item.createdAt).fromNow()

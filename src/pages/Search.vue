@@ -77,6 +77,7 @@ export default {
 				el.original.highlightedName = el.string
 				return el.original 
 			})
+			this.items = _.reverse(this.items)
 			this.loading = false
 		},
 		fetchAndCacheAllItemsOfCurrentServer() {
